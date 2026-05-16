@@ -4,9 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vike dev",
     "build": "vike build",
-    "preview": "vike preview"
+    "start": "vike dev"
   },
   "dependencies": {
     "gray-matter": "4.0.3",
