@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "vike build",
-    "start": "vike dev"
+    "start": "vike dev",
+    "prepare": "husky"
   },
   "dependencies": {
     "gray-matter": "4.0.3",
@@ -22,9 +23,24 @@
     "@types/react-dom": "19.x",
     "@typescript/native-preview": "7.0.0-dev.20260516.1",
     "@vitejs/plugin-react": "6.0.2",
+    "husky": "9.1.7",
+    "lint-staged": "17.0.5",
     "prettier": "3.8.3",
     "typescript": "6.0.3",
     "vite": "8.0.13"
   },
-  "prettier": "@bifravst/prettier-config"
+  "prettier": "@bifravst/prettier-config",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{md,json,yaml,yml,js,css}": [
+      "prettier --write"
+    ]
+  }
 }
