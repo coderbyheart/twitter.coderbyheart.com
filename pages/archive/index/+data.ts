@@ -1,7 +1,7 @@
-import { getYearIndex } from "../../../src/tweets";
+import { getYearIndex } from '../../../src/tweets'
 
 export type Data = {
-  years: ReturnType<typeof getYearIndex>;
-};
+	years: ReturnType<typeof getYearIndex>
+}
 
-export const data = (): Data => ({ years: getYearIndex() });
+export const data = (): Data => ({ years: getYearIndex() })
