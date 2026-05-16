@@ -1,30 +1,8 @@
 import { marked } from 'marked'
 import { hasHashtagPage } from './tweets'
+import type { RenderedTweet, Tweet } from './types'
 
-const MONTH_NAMES = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December',
-]
-
-export function monthName(month: string): string {
-	const idx = parseInt(month, 10) - 1
-	return MONTH_NAMES[idx] ?? month
-}
-
-export function formatDate(iso: string): string {
-	const d = new Date(iso)
-	return d.toUTCString().replace(' GMT', ' UTC')
-}
+export { formatDate, monthName } from './format-client'
 
 const SELF_TWEET_RE =
 	/^https?:\/\/(?:www\.|mobile\.)?twitter\.com\/coderbyheart\/status\/(\d+)/i
@@ -96,4 +74,12 @@ marked.setOptions({
 
 export function renderMarkdown(md: string): string {
 	return marked.parse(md, { async: false }) as string
+}
+
+export function renderTweet(t: Tweet): RenderedTweet {
+	return { ...t, html: renderMarkdown(t.body) }
+}
+
+export function renderTweets(ts: Tweet[]): RenderedTweet[] {
+	return ts.map(renderTweet)
 }

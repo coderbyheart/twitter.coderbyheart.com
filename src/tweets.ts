@@ -1,28 +1,11 @@
 import matter from 'gray-matter'
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import type { Tweet, TweetFrontmatter } from './types'
+
+export type { Tweet, TweetFrontmatter } from './types'
 
 const STATUS_DIR = join(process.cwd(), 'status')
-
-export interface TweetFrontmatter {
-	favorite_count?: number
-	retweet_count?: number
-	created_at: string
-	lang?: string
-	full_text?: string
-	in_reply_to_screen_name?: string
-	in_reply_to_status_id_str?: string
-	replies?: string[]
-	video_aspect_ratio?: number
-}
-
-export interface Tweet {
-	id: string
-	body: string
-	data: TweetFrontmatter
-	year: string
-	month: string
-}
 
 let cache: Map<string, Tweet> | null = null
 let sortedCache: Tweet[] | null = null

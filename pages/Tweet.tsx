@@ -1,14 +1,13 @@
-import { formatDate, renderMarkdown } from '../src/format'
-import type { Tweet as TweetT } from '../src/tweets'
+import { formatDate } from '../src/format-client'
+import type { RenderedTweet } from '../src/types'
 
 interface Props {
-	tweet: TweetT
+	tweet: RenderedTweet
 	showPermalink?: boolean
 }
 
 export default function Tweet({ tweet, showPermalink = true }: Props) {
-	const { id, body, data } = tweet
-	const html = renderMarkdown(body)
+	const { id, html, data } = tweet
 	return (
 		<article className="tweet" id={`status-${id}`}>
 			{data.in_reply_to_screen_name && data.in_reply_to_status_id_str ? (

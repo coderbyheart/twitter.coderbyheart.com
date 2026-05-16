@@ -1,5 +1,5 @@
 import { useData } from 'vike-react/useData'
-import { monthName } from '../../../src/format'
+import { monthName } from '../../../src/format-client'
 import type { Data } from './+data'
 
 export default function Page() {

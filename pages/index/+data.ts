@@ -1,7 +1,9 @@
-import { getMostLiked, getYearIndex, type Tweet } from '../../src/tweets'
+import { renderTweets } from '../../src/format'
+import { getMostLiked, getYearIndex } from '../../src/tweets'
+import type { RenderedTweet } from '../../src/types'
 
 export type Data = {
-	topLiked: Tweet[]
+	topLiked: RenderedTweet[]
 	totalTweets: number
 	years: ReturnType<typeof getYearIndex>
 }
@@ -9,7 +11,7 @@ export type Data = {
 export const data = (): Data => {
 	const years = getYearIndex()
 	return {
-		topLiked: getMostLiked(50),
+		topLiked: renderTweets(getMostLiked(50)),
 		totalTweets: years.reduce((s, y) => s + y.count, 0),
 		years,
 	}

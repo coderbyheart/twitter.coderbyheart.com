@@ -1,11 +1,13 @@
 import { render } from 'vike/abort'
 import type { PageContextServer } from 'vike/types'
-import { getTweetsByMonth, type Tweet } from '../../../../src/tweets'
+import { renderTweets } from '../../../../src/format'
+import { getTweetsByMonth } from '../../../../src/tweets'
+import type { RenderedTweet } from '../../../../src/types'
 
 export type Data = {
 	year: string
 	month: string
-	tweets: Tweet[]
+	tweets: RenderedTweet[]
 }
 
 export const data = (pageContext: PageContextServer): Data => {
@@ -15,5 +17,5 @@ export const data = (pageContext: PageContextServer): Data => {
 	}
 	const tweets = getTweetsByMonth(year, month)
 	if (tweets.length === 0) throw render(404)
-	return { year, month, tweets }
+	return { year, month, tweets: renderTweets(tweets) }
 }

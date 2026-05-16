@@ -1,5 +1,5 @@
 import { useData } from 'vike-react/useData'
-import { monthName } from '../../../../src/format'
+import { monthName } from '../../../../src/format-client'
 import Tweet from '../../../Tweet'
 import type { Data } from './+data'
 
