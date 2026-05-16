@@ -11,7 +11,8 @@ export default function Page() {
 			</div>
 			<h1>Archive</h1>
 			<p>
-				{total.toLocaleString()} tweets across {years.length} years.
+				{total.toLocaleString()} tweets across {years.length} years. Browse by{' '}
+				<a href="/hashtag">hashtag</a>.
 			</p>
 			<div className="year-grid">
 				{years.map((y) => (

@@ -116,6 +116,93 @@ export function getTweet(id: string): Tweet | undefined {
 	return loadAllTweets().get(id)
 }
 
+const HASHTAG_RE = /(?:^|[^\p{L}\p{N}_/&])#([\p{L}_][\p{L}\p{N}_]*)/gu
+
+export function extractHashtags(text: string): string[] {
+	const out: string[] = []
+	for (const m of text.matchAll(HASHTAG_RE)) out.push(m[1]!)
+	return out
+}
+
+export function hashtagSlug(tag: string): string {
+	return tag.toLowerCase()
+}
+
+interface HashtagIndexCache {
+	bySlug: Map<string, { display: string; tweets: Tweet[] }>
+	list: { tag: string; slug: string; count: number }[]
+}
+
+let hashtagCache: HashtagIndexCache | null = null
+
+function buildHashtagIndex(): HashtagIndexCache {
+	if (hashtagCache) return hashtagCache
+	const bySlug = new Map<
+		string,
+		{ display: string; counts: Map<string, number>; tweets: Map<string, Tweet> }
+	>()
+	for (const t of loadAllTweets().values()) {
+		const seenInTweet = new Set<string>()
+		for (const raw of extractHashtags(t.body)) {
+			const slug = hashtagSlug(raw)
+			let entry = bySlug.get(slug)
+			if (!entry) {
+				entry = { display: raw, counts: new Map(), tweets: new Map() }
+				bySlug.set(slug, entry)
+			}
+			entry.counts.set(raw, (entry.counts.get(raw) ?? 0) + 1)
+			if (!seenInTweet.has(slug)) {
+				seenInTweet.add(slug)
+				entry.tweets.set(t.id, t)
+			}
+		}
+	}
+	const finalBySlug = new Map<string, { display: string; tweets: Tweet[] }>()
+	const list: { tag: string; slug: string; count: number }[] = []
+	for (const [slug, entry] of bySlug) {
+		let display = entry.display
+		let best = 0
+		for (const [variant, count] of entry.counts) {
+			if (count > best) {
+				best = count
+				display = variant
+			}
+		}
+		if (entry.tweets.size < 2) continue
+		const tweets = [...entry.tweets.values()].sort(
+			(a, b) =>
+				new Date(b.data.created_at).getTime() -
+				new Date(a.data.created_at).getTime(),
+		)
+		finalBySlug.set(slug, { display, tweets })
+		list.push({ tag: display, slug, count: tweets.length })
+	}
+	list.sort((a, b) => {
+		if (b.count !== a.count) return b.count - a.count
+		return a.slug.localeCompare(b.slug)
+	})
+	hashtagCache = { bySlug: finalBySlug, list }
+	return hashtagCache
+}
+
+export function getHashtagIndex(): {
+	tag: string
+	slug: string
+	count: number
+}[] {
+	return buildHashtagIndex().list
+}
+
+export function getTweetsByHashtag(
+	slug: string,
+): { display: string; tweets: Tweet[] } | undefined {
+	return buildHashtagIndex().bySlug.get(slug.toLowerCase())
+}
+
+export function hasHashtagPage(slug: string): boolean {
+	return buildHashtagIndex().bySlug.has(slug.toLowerCase())
+}
+
 export function getReplyChain(id: string): Tweet[] {
 	const out: Tweet[] = []
 	const seen = new Set<string>()

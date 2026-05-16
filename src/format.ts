@@ -1,4 +1,5 @@
 import { marked } from 'marked'
+import { hasHashtagPage } from './tweets'
 
 const MONTH_NAMES = [
 	'January',
@@ -54,6 +55,38 @@ renderer.link = function (token) {
 	}
 	return origLink(next)
 }
+
+const HASHTAG_START_RE = /(?:^|[^\p{L}\p{N}_/&])#[\p{L}_][\p{L}\p{N}_]*/u
+const HASHTAG_TOKEN_RE = /^#([\p{L}_][\p{L}\p{N}_]*)/u
+
+marked.use({
+	extensions: [
+		{
+			name: 'hashtag',
+			level: 'inline',
+			start(src: string): number | undefined {
+				const m = HASHTAG_START_RE.exec(src)
+				if (!m) return undefined
+				return (m.index ?? 0) + (m[0].startsWith('#') ? 0 : 1)
+			},
+			tokenizer(src: string) {
+				const m = HASHTAG_TOKEN_RE.exec(src)
+				if (!m) return undefined
+				return {
+					type: 'hashtag',
+					raw: m[0],
+					tag: m[1],
+				}
+			},
+			renderer(token): string {
+				const tag = (token as unknown as { tag: string }).tag
+				const slug = tag.toLowerCase()
+				if (!hasHashtagPage(slug)) return `#${tag}`
+				return `<a class="hashtag" href="/hashtag/${encodeURIComponent(slug)}">#${tag}</a>`
+			},
+		},
+	],
+})
 
 marked.setOptions({
 	gfm: true,

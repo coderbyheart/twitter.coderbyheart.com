@@ -111,6 +111,32 @@ a:hover {
   font-size: 0.9rem;
 }
 
+.hashtag-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.hashtag-list li {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.hashtag-list .count {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.tweet-body a.hashtag {
+  white-space: nowrap;
+}
+
 .breadcrumbs {
   color: var(--muted);
   font-size: 0.9rem;
