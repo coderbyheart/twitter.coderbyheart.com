@@ -38,12 +38,6 @@ export default function Tweet({ tweet, showPermalink = true }: Props) {
         )}
         {data.favorite_count ? <span>♥ {data.favorite_count}</span> : null}
         {data.retweet_count ? <span>↻ {data.retweet_count}</span> : null}
-        <a
-          href={`https://twitter.com/coderbyheart/status/${id}`}
-          rel="nofollow noopener"
-        >
-          on twitter.com ↗
-        </a>
       </div>
     </article>
   );
