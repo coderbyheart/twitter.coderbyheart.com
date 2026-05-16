@@ -25,6 +25,14 @@ export function formatDate(iso: string): string {
   return d.toUTCString().replace(" GMT", " UTC");
 }
 
+const SELF_TWEET_RE =
+  /^https?:\/\/(?:www\.|mobile\.)?twitter\.com\/coderbyheart\/status\/(\d+)/i;
+
+function rewriteSelfTweetHref(href: string): string {
+  const match = SELF_TWEET_RE.exec(href);
+  return match ? `/status/${match[1]}` : href;
+}
+
 const renderer = new marked.Renderer();
 const origImage = renderer.image.bind(renderer);
 renderer.image = function ({ href, title, text }) {
@@ -32,6 +40,19 @@ renderer.image = function ({ href, title, text }) {
     return `<video src="${href}" controls preload="metadata" class="tweet-media"></video>`;
   }
   return `<img src="${href ?? ""}" alt="${text ?? ""}"${title ? ` title="${title}"` : ""} loading="lazy" class="tweet-media" />`;
+};
+
+const origLink = renderer.link.bind(renderer);
+renderer.link = function (token) {
+  const href = token.href ?? "";
+  const rewritten = rewriteSelfTweetHref(href);
+  if (rewritten === href) return origLink(token);
+  const next = { ...token, href: rewritten };
+  if (token.text === href) {
+    next.text = rewritten;
+    next.tokens = [{ type: "text", raw: rewritten, text: rewritten }];
+  }
+  return origLink(next);
 };
 
 marked.setOptions({
