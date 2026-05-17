@@ -10,7 +10,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					@coderbyheart on Twitter
 				</a>
 				<p className="site-tagline">
-					A static archive of Markus Tacker's tweets.
+					A static archive of{' '}
+					<a href="https://coderbyheart.com" rel="me">
+						Markus Tacker
+					</a>
+					's tweets. Follow me on Mastodon:{' '}
+					<a href="https://chaos.social/@coderbyheart" rel="me">
+						@coderbyheart@chaos.social
+					</a>
+					.
 				</p>
 			</header>
 			<main className="site-main">{children}</main>
