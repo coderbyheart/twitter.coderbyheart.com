@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@bifravst/prettier-config": "1.1.17",
-    "@types/node": "^25.8.0",
+    "@types/node": "^25.9.4",
     "@types/react": "19.x",
     "@types/react-dom": "19.x",
     "@typescript/native-preview": "7.0.0-dev.20260516.1",
