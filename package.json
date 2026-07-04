@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vike build",
+    "build": "vike build && node scripts/generate-sitemap.ts",
     "start": "vike dev",
     "prepare": "husky"
   },
