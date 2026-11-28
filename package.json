@@ -17,7 +17,7 @@
     "vike-react": "0.6.25"
   },
   "devDependencies": {
-    "@types/node": "^26.1.0",
+    "@types/node": "^26.6.10",
     "@types/react": "19.x",
     "@types/react-dom": "19.x",
     "@typescript/native-preview": "7.0.0-dev.20260704.1",
